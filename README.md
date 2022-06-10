@@ -1,2 +1,2 @@
 # CoMoBot
-yes
+STM은 미친새끼다.
