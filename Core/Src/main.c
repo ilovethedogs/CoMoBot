@@ -57,6 +57,21 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint32_t counter = 0;
+int16_t curPos = 0;
+int16_t speed = 0;
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+  /* Prevent unused argument(s) compilation warning */
+  counter = __HAL_TIM_GET_COUNTER(htim);
+
+  curPos = (int16_t) counter / 4;
+
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_TIM_IC_CaptureCallback could be implemented in the user file
+   */
+}
 /* USER CODE END 0 */
 
 /**
@@ -89,12 +104,17 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_TIM1_Init();
-  MX_CAN1_Init();
+  MX_CAN2_Init();
+  MX_TIM2_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+
+  HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL);
   /* USER CODE END 2 */
 
   /* Infinite loop */
