@@ -31,7 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define DEG (0.3515625)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,11 +51,14 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern int curPos;
-int16_t oldPos = 0;
-extern int speed;
-int idx = 0;
-
+extern int curPos0;
+extern int curPos1;
+extern int oldPos0;
+extern int oldPos1;
+extern int speed0;
+extern int speed1;
+extern int t0;
+extern int t1;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -188,13 +191,14 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	++idx;
+	++t1;
 
-	if (idx == 500) {
-		speed = (curPos - oldPos) * 2;
-		oldPos = curPos;
-		idx = 0;
-	}
+	speed0 = (int) (curPos0 - oldPos0) * (t1 - t0);
+	speed1 = (int) (curPos1 - oldPos1) * (t1 - t0);
+	oldPos0 = curPos0;
+	oldPos1 = curPos1;
+
+	t0 = t1;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */

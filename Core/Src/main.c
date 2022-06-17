@@ -57,20 +57,44 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-uint32_t counter = 0;
-int16_t curPos = 0;
-int16_t speed = 0;
+uint32_t counter0 = 0;
+int16_t curPos0 = 0;
+int speed0 = 0;
+
+uint32_t counter1 = 0;
+int16_t curPos1 = 0;
+int speed1 = 0;
+
+int16_t oldPos0 = 0;
+int16_t oldPos1 = 0;
+
+int t0 = 0;
+int t1 = 0;
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
   /* Prevent unused argument(s) compilation warning */
-  counter = __HAL_TIM_GET_COUNTER(htim);
 
-  curPos = (int16_t) counter / 4;
+	if (htim == &htim2) {
+		counter0 = __HAL_TIM_GET_COUNTER(htim);
+
+		curPos0 = (int16_t) counter0 / 4;
+	}
+	else if (htim == &htim3) {
+		counter1 = __HAL_TIM_GET_COUNTER(htim);
+
+		curPos1 = (int16_t) counter1 / 4;
+	}
+
 
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_TIM_IC_CaptureCallback could be implemented in the user file
    */
+}
+
+int _write(int file, char* p, int len) {
+	HAL_UART_Transmit(&huart2, p, len, 16);
+	return len;
 }
 /* USER CODE END 0 */
 
@@ -95,6 +119,7 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
+  SysTick_Config(SystemCoreClock / 1000);
 
   /* USER CODE BEGIN SysInit */
 
@@ -122,11 +147,13 @@ int main(void)
   uint32_t ccr = 0;
   while (1)
   {
-	  TIM1->CCR1 = TIM1->ARR - ccr;
-	  TIM1->CCR2 = ccr;
-	  ccr += 100;
-	  if (ccr > TIM1->ARR) ccr = 0;
+	  //TIM1->CCR1 = TIM1->ARR - ccr;
+	  //TIM1->CCR2 = ccr;
+	  //ccr += 100;
+	  //if (ccr > TIM1->ARR) ccr = 0;
 	  HAL_Delay(50);
+
+	  printf("%d %d\n", speed0, speed1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
