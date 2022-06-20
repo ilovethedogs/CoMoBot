@@ -1,8 +1,13 @@
 #MicroXplorer Configuration settings - do not modify
-CAN2.CalculateBaudRate=875000
-CAN2.CalculateTimeBit=1142
-CAN2.CalculateTimeQuantum=380.95238095238096
-CAN2.IPParameters=CalculateTimeQuantum,CalculateTimeBit,CalculateBaudRate
+CAN2.BS1=CAN_BS1_14TQ
+CAN2.BS2=CAN_BS2_5TQ
+CAN2.CalculateBaudRate=100000
+CAN2.CalculateTimeBit=10000
+CAN2.CalculateTimeQuantum=500.0
+CAN2.IPParameters=CalculateTimeQuantum,CalculateTimeBit,CalculateBaudRate,Prescaler,BS1,BS2,TTCM,NART
+CAN2.NART=ENABLE
+CAN2.Prescaler=21
+CAN2.TTCM=DISABLE
 File.Version=6
 GPIO.groupedBy=Group By Peripherals
 KeepUserPlacement=false
@@ -48,6 +53,7 @@ Mcu.UserName=STM32F446RETx
 MxCube.Version=6.5.0
 MxDb.Version=DB.6.0.50
 NVIC.BusFault_IRQn=true\:0\:0\:false\:false\:true\:true\:false\:true
+NVIC.CAN2_RX0_IRQn=true\:0\:0\:false\:false\:true\:true\:true\:true
 NVIC.DebugMonitor_IRQn=true\:0\:0\:false\:false\:true\:true\:false\:true
 NVIC.ForceEnableDMAVector=true
 NVIC.HardFault_IRQn=true\:0\:0\:false\:false\:true\:true\:false\:true

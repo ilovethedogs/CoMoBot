@@ -45,18 +45,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
 uint32_t counter0 = 0;
 int16_t curPos0 = 0;
 int16_t speed0 = 0;
@@ -68,6 +56,17 @@ int16_t speed1 = 0;
 uint16_t t0 = 0;
 uint16_t t1 = 0;
 
+volatile uint8_t can2_rx0_flag = 0;
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -140,14 +139,42 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  canFilter1.FilterMaskIdHigh = 0x7F3 << 5;
+  canFilter1.FilterIdHigh - 0x106 << 5;
+  canFilter1.FilterMaskIdLow = 0x753 << 5;
+  canFilter1.FilterIdLow = 0x106 << 5;
+  canFilter1.FilterMode = CAN_FILTERMODE_IDMASK;
+  canFilter1.FilterScale = CAN_FILTERSCALE_16BIT;
+  canFilter1.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+  canFilter1.FilterBank = 0;
+  canFilter1.FilterActivation = ENABLE;
+
+  HAL_CAN_ConfigFilter(&hcan2, &canFilter1);
+  HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
+  HAL_CAN_Start(&hcan2);
+
   uint32_t ccr = 0;
   while (1)
   {
+	  if (can2_rx0_flag) {
+		  can2_rx0_flag = 0;
+
+		  // receive and do something..
+	  }
+
 	  TIM1->CCR1 = TIM1->ARR - ccr;
 	  TIM1->CCR2 = ccr;
 	  ccr += 100;
 	  if (ccr > TIM1->ARR) ccr = 0;
 	  HAL_Delay(50);
+
+	  canTxHeader.StdId = 0x102;
+	  canTxHeader.RTR = CAN_RTR_DATA;
+	  canTxHeader.IDE = CAN_ID_STD;
+	  canTxHeader.DLC = 8;
+
+	  TxMailBox = HAL_CAN_GetTxMailboxesFreeLevel(&hcan2);
+	  HAL_CAN_AddTxMessage(&hcan2, &canTxHeader, &can2Tx0Data[0], &TxMailBox);
 
 	  printf("%d %d\n", speed0, curPos0);
     /* USER CODE END WHILE */
@@ -204,7 +231,12 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
+	if (hcan->Instance == CAN2) {
+		HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &canRxHeader, &can1Rx0Data[0]);
+		can2_rx0_flag = 1;
+	}
+}
 /* USER CODE END 4 */
 
 /**
