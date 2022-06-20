@@ -51,12 +51,12 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern int curPos0;
-extern int curPos1;
-extern int oldPos0;
-extern int oldPos1;
-extern int speed0;
-extern int speed1;
+extern int16_t curPos0;
+extern int16_t curPos1;
+int16_t oldPos0 = 0;
+int16_t oldPos1 = 0;
+extern int16_t speed0;
+extern int16_t speed1;
 extern int t0;
 extern int t1;
 /* USER CODE END 0 */
@@ -193,8 +193,8 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 	++t1;
 
-	speed0 = (int) (curPos0 - oldPos0) * (t1 - t0);
-	speed1 = (int) (curPos1 - oldPos1) * (t1 - t0);
+	speed0 = (int16_t) (curPos0 - oldPos0);
+	speed1 = (int16_t) (curPos1 - oldPos1);
 	oldPos0 = curPos0;
 	oldPos1 = curPos1;
 

@@ -59,17 +59,14 @@ void SystemClock_Config(void);
 
 uint32_t counter0 = 0;
 int16_t curPos0 = 0;
-int speed0 = 0;
+int16_t speed0 = 0;
 
 uint32_t counter1 = 0;
 int16_t curPos1 = 0;
-int speed1 = 0;
+int16_t speed1 = 0;
 
-int16_t oldPos0 = 0;
-int16_t oldPos1 = 0;
-
-int t0 = 0;
-int t1 = 0;
+uint16_t t0 = 0;
+uint16_t t1 = 0;
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
@@ -119,7 +116,6 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
-  SysTick_Config(SystemCoreClock / 1000);
 
   /* USER CODE BEGIN SysInit */
 
@@ -130,8 +126,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   MX_CAN2_Init();
-  MX_TIM2_Init();
   MX_TIM3_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
@@ -147,13 +143,13 @@ int main(void)
   uint32_t ccr = 0;
   while (1)
   {
-	  //TIM1->CCR1 = TIM1->ARR - ccr;
-	  //TIM1->CCR2 = ccr;
-	  //ccr += 100;
-	  //if (ccr > TIM1->ARR) ccr = 0;
+	  TIM1->CCR1 = TIM1->ARR - ccr;
+	  TIM1->CCR2 = ccr;
+	  ccr += 100;
+	  if (ccr > TIM1->ARR) ccr = 0;
 	  HAL_Delay(50);
 
-	  printf("%d %d\n", speed0, speed1);
+	  printf("%d %d\n", speed0, curPos0);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
