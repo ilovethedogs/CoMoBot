@@ -174,7 +174,11 @@ int main(void)
 	  canTxHeader.DLC = 8;
 
 	  TxMailBox = HAL_CAN_GetTxMailboxesFreeLevel(&hcan2);
-	  HAL_CAN_AddTxMessage(&hcan2, &canTxHeader, &can2Tx0Data[0], &TxMailBox);
+	  can2Tx0Data[0] = (speed0 & 0xFF00) >> 8;
+	  can2Tx0Data[1] = (speed0 & 0x00FF);
+	  can2Tx0Data[2] = (speed1 & 0xFF00) >> 8;
+	  can2Tx0Data[3] = (speed1 & 0x00FF);
+ 	  HAL_CAN_AddTxMessage(&hcan2, &canTxHeader, &can2Tx0Data[0], &TxMailBox);
 
 	  printf("%d %d\n", speed0, curPos0);
     /* USER CODE END WHILE */
