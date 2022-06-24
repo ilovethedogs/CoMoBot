@@ -30,8 +30,8 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 extern CAN_FilterTypeDef canFilter1;
-extern CAN_RxHeaderTypeDef canRxHeader1;
-extern CAN_TxHeaderTypeDef canTxHeader2;
+extern CAN_RxHeaderTypeDef canRxHeader;
+extern CAN_TxHeaderTypeDef canTxHeader;
 extern uint8_t can2Rx0Data[8];
 extern uint32_t TxMailBox;
 extern uint8_t can2Tx0Data[8];

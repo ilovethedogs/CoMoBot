@@ -22,8 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 CAN_FilterTypeDef canFilter1;
-CAN_RxHeaderTypeDef canRxHeader1;
-CAN_TxHeaderTypeDef canTxHeader2;
+CAN_RxHeaderTypeDef canRxHeader;
+CAN_TxHeaderTypeDef canTxHeader;
 uint8_t can2Rx0Data[8];
 uint32_t TxMailBox;
 uint8_t can2Tx0Data[8];

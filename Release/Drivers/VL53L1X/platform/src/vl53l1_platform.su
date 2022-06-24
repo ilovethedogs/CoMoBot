@@ -1,0 +1,9 @@
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:41:8:VL53L1_WriteMulti	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:45:8:VL53L1_ReadMulti	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:49:8:VL53L1_WrByte	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:53:8:VL53L1_WrWord	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:57:8:VL53L1_WrDWord	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:61:8:VL53L1_RdByte	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:65:8:VL53L1_RdWord	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:69:8:VL53L1_RdDWord	0	static
+../Drivers/VL53L1X/platform/src/vl53l1_platform.c:73:8:VL53L1_WaitMs	0	static
