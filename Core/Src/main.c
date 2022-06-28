@@ -47,16 +47,16 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile uint32_t counter0 = 0;
-volatile int16_t curPos0 = 0;
-volatile int16_t speed0 = 0;
-
-volatile uint32_t counter1 = 0;
-volatile int16_t curPos1 = 0;
-volatile int16_t speed1 = 0;
-
-volatile uint16_t t0 = 0;
-volatile uint16_t t1 = 0;
+//volatile unsigned int counter0 = 0;
+volatile unsigned int counter0 = 0;
+volatile unsigned int counter1 = 0;
+volatile unsigned int oldCounter0 = 0;
+volatile unsigned int oldCounter1 = 0;
+volatile unsigned int diff0;
+volatile unsigned int diff1;
+volatile float speed0;
+volatile float speed1;
+volatile int rnd = 0;
 
 volatile uint8_t can2_rx0_flag = 0;
 
@@ -118,18 +118,14 @@ void setRightMotorSpeed(int16_t speed) {
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
   /* Prevent unused argument(s) compilation warning */
-
+/*
 	if (htim == &htim2) {
 		counter0 = __HAL_TIM_GET_COUNTER(htim);
-
-		curPos0 = (int16_t) counter0 / 4;
 	}
 	else if (htim == &htim3) {
 		counter1 = __HAL_TIM_GET_COUNTER(htim);
-
-		curPos1 = (int16_t) counter1 / 4;
 	}
-
+*/
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_TIM_IC_CaptureCallback could be implemented in the user file
    */
@@ -139,7 +135,7 @@ int _write(int file, char* p, int len) {
 	HAL_UART_Transmit(&huart2, p, len, 16);
 	return len;
 }
-
+/*
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	switch (GPIO_Pin) {
@@ -207,6 +203,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			break;
 	}
 }
+*/
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	++rnd;
+}
 /* USER CODE END 0 */
 
 /**
@@ -241,56 +241,11 @@ int main(void)
   MX_TIM1_Init();
   MX_CAN2_Init();
   MX_TIM3_Init();
-  MX_TIM2_Init();
   MX_I2C1_Init();
-
-  uint8_t all_booted = 0;
-  while (!all_booted) {
-	  uint8_t boot_state[15] = {0};
-	  VL53L1X_BootState(TOF0, &boot_state[0]);
-	  VL53L1X_BootState(TOF1, &boot_state[1]);
-	  VL53L1X_BootState(TOF2, &boot_state[2]);
-	  VL53L1X_BootState(TOF3, &boot_state[3]);
-	  VL53L1X_BootState(TOF4, &boot_state[4]);
-	  VL53L1X_BootState(TOF5, &boot_state[5]);
-	  VL53L1X_BootState(TOF6, &boot_state[6]);
-	  VL53L1X_BootState(TOF7, &boot_state[7]);
-	  VL53L1X_BootState(TOF8, &boot_state[8]);
-	  VL53L1X_BootState(TOF9, &boot_state[9]);
-	  VL53L1X_BootState(TOF10, &boot_state[10]);
-	  VL53L1X_BootState(TOF11, &boot_state[11]);
-	  VL53L1X_BootState(TOF12, &boot_state[12]);
-	  VL53L1X_BootState(TOF13, &boot_state[13]);
-	  VL53L1X_BootState(TOF14, &boot_state[14]);
-
-	  all_booted = 1;
-	  for (uint8_t i = 0; i != 15; ++i) {
-		  all_booted *= boot_state[i];
-	  }
-  }
-
-  VL53L1X_SensorInit(TOF0);
-  /*
-  VL53L1X_SensorInit(TOF1);
-  VL53L1X_SensorInit(TOF2);
-  VL53L1X_SensorInit(TOF3);
-  VL53L1X_SensorInit(TOF4);
-  VL53L1X_SensorInit(TOF5);
-  VL53L1X_SensorInit(TOF6);
-  VL53L1X_SensorInit(TOF7);
-  VL53L1X_SensorInit(TOF8);
-  VL53L1X_SensorInit(TOF9);
-  VL53L1X_SensorInit(TOF10);
-  VL53L1X_SensorInit(TOF11);
-  VL53L1X_SensorInit(TOF12);
-  VL53L1X_SensorInit(TOF13);
-  VL53L1X_SensorInit(TOF14);
-   */
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
   HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start_IT(&htim3, TIM_CHANNEL_ALL);
@@ -330,9 +285,7 @@ int main(void)
   HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
   HAL_CAN_Start(&hcan2);
 
-  setLeftMotorSpeed(-49);
-  setRightMotorSpeed(-19);
-
+  long tick = HAL_GetTick();
   while (1)
   {
 	  if (can2_rx0_flag) {
@@ -341,19 +294,45 @@ int main(void)
 		  // receive and do something..
 	  }
 
+	  //HAL_GPIO_TogglePin(PWM_CH1_DIR_GPIO_Port, PWM_CH1_DIR_Pin);
+	  //HAL_GPIO_TogglePin(PWM_CH2_DIR_GPIO_Port, PWM_CH2_DIR_Pin);
+
+	  if (HAL_GetTick() - tick > 1000L) {
+		  counter0 = __HAL_TIM_GET_COUNTER(&htim2);
+		  counter1 = __HAL_TIM_GET_COUNTER(&htim3);
+
+		  if (counter0 > oldCounter0)
+		  		diff0 = counter0 - oldCounter0;
+		  else
+			    diff0 = (65535 - oldCounter0) + counter0;
+
+		  if (counter1 > oldCounter1)
+				diff1 = counter1 - oldCounter1;
+		  else
+			  	diff1 = (65535 - oldCounter1) + counter1;
+
+		  tick = HAL_GetTick();
+		  oldCounter0 = __HAL_TIM_GET_COUNTER(&htim2);
+		  oldCounter1 = __HAL_TIM_GET_COUNTER(&htim3);
+
+		  speed0 = diff0 / (2048 * 60);
+		  speed1 = diff1 / (2048 * 60);
+		  printf("%d %d %d\n", diff0, diff1, rnd);
+	  }
+
 	  canTxHeader.StdId = 0x102;
 	  canTxHeader.RTR = CAN_RTR_DATA;
 	  canTxHeader.IDE = CAN_ID_STD;
 	  canTxHeader.DLC = 8;
-
+/*
 	  TxMailBox = HAL_CAN_GetTxMailboxesFreeLevel(&hcan2);
 	  can2Tx0Data[0] = (speed0 & 0xFF00) >> 8;
 	  can2Tx0Data[1] = (speed0 & 0x00FF);
 	  can2Tx0Data[2] = (speed1 & 0xFF00) >> 8;
 	  can2Tx0Data[3] = (speed1 & 0x00FF);
  	  HAL_CAN_AddTxMessage(&hcan2, &canTxHeader, &can2Tx0Data[0], &TxMailBox);
+*/
 
-	  printf("%d %d\n", speed0, curPos0);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -57,10 +57,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ENCODER0_A_Pin GPIO_PIN_0
-#define ENCODER0_A_GPIO_Port GPIOA
-#define ENCODER0_B_Pin GPIO_PIN_1
-#define ENCODER0_B_GPIO_Port GPIOA
+#define ENCODER2_A_Pin GPIO_PIN_0
+#define ENCODER2_A_GPIO_Port GPIOA
+#define ENCODER2_B_Pin GPIO_PIN_1
+#define ENCODER2_B_GPIO_Port GPIOA
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
@@ -69,20 +69,16 @@ void Error_Handler(void);
 #define ENCODER1_A_GPIO_Port GPIOA
 #define ENCODER1_B_Pin GPIO_PIN_7
 #define ENCODER1_B_GPIO_Port GPIOA
-#define PWM1_1_Pin GPIO_PIN_8
-#define PWM1_1_GPIO_Port GPIOA
-#define PWM1_0_Pin GPIO_PIN_9
-#define PWM1_0_GPIO_Port GPIOA
-#define PWM0_1_Pin GPIO_PIN_10
-#define PWM0_1_GPIO_Port GPIOA
-#define PWM0_0_Pin GPIO_PIN_11
-#define PWM0_0_GPIO_Port GPIOA
+#define PWM_CH2_DIR_Pin GPIO_PIN_7
+#define PWM_CH2_DIR_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define PWM_CH1_DIR_Pin GPIO_PIN_4
+#define PWM_CH1_DIR_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
