@@ -69,6 +69,8 @@ void Error_Handler(void);
 #define ENCODER1_A_GPIO_Port GPIOA
 #define ENCODER1_B_Pin GPIO_PIN_7
 #define ENCODER1_B_GPIO_Port GPIOA
+#define CAN_STBY_Pin GPIO_PIN_12
+#define CAN_STBY_GPIO_Port GPIOB
 #define PWM_CH2_DIR_Pin GPIO_PIN_7
 #define PWM_CH2_DIR_GPIO_Port GPIOC
 #define TMS_Pin GPIO_PIN_13

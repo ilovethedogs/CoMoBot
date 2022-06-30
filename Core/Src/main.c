@@ -52,13 +52,13 @@ volatile unsigned int counter0 = 0;
 volatile unsigned int counter1 = 0;
 volatile unsigned int oldCounter0 = 0;
 volatile unsigned int oldCounter1 = 0;
-volatile unsigned int diff0;
-volatile unsigned int diff1;
+volatile unsigned int diff0 = 0;
+volatile unsigned int diff1 = 0;
 volatile float speed0;
 volatile float speed1;
 volatile int rnd = 0;
 
-volatile uint8_t can2_rx0_flag = 0;
+volatile uint8_t can1_rx0_flag = 0;
 
 uint16_t TOF0  = 0x52;
 uint16_t TOF1  = 0x54;
@@ -102,17 +102,33 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void setLeftMotorSpeed(int16_t speed) {
-	 uint32_t ccr = (uint32_t) speed * 4 * 1000;
+	if (speed < 0) {
+		HAL_GPIO_WritePin(PWM_CH1_DIR_GPIO_Port, PWM_CH1_DIR_Pin, GPIO_PIN_RESET);
+		speed *= -1;
+	}
+	else {
+		HAL_GPIO_WritePin(PWM_CH1_DIR_GPIO_Port, PWM_CH1_DIR_Pin, GPIO_PIN_SET);
+	}
+
+	 uint32_t ccr = speed * 4 * 1000;
 	 if (ccr > TIM1->ARR) return;
 	 TIM1->CCR1 = ccr;
-	  //HAL_Delay(50);
+	 //HAL_Delay(50);
 }
 
 void setRightMotorSpeed(int16_t speed) {
-	  uint32_t ccr = (uint32_t) speed * 4 * 1000;
-	  if (ccr > TIM1->ARR) return;
-	  TIM1->CCR2 = ccr;
-	  //HAL_Delay(50);
+	if (speed < 0) {
+		HAL_GPIO_WritePin(PWM_CH2_DIR_GPIO_Port, PWM_CH2_DIR_Pin, GPIO_PIN_RESET);
+		speed *= -1;
+	}
+	else {
+		HAL_GPIO_WritePin(PWM_CH2_DIR_GPIO_Port, PWM_CH2_DIR_Pin, GPIO_PIN_SET);
+	}
+
+	 uint32_t ccr = speed * 4 * 1000;
+	 if (ccr > TIM1->ARR) return;
+	 TIM1->CCR2 = ccr;
+	 //HAL_Delay(50);
 }
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
@@ -239,10 +255,10 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_TIM1_Init();
-  MX_CAN2_Init();
   MX_TIM3_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
+  MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
@@ -273,7 +289,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   canFilter1.FilterMaskIdHigh = 0x7F3 << 5;
   canFilter1.FilterIdHigh = 0x106 << 5;
-  canFilter1.FilterMaskIdLow = 0x753 << 5;
+  canFilter1.FilterMaskIdLow = 0x7F3 << 5;
   canFilter1.FilterIdLow = 0x106 << 5;
   canFilter1.FilterMode = CAN_FILTERMODE_IDMASK;
   canFilter1.FilterScale = CAN_FILTERSCALE_16BIT;
@@ -281,17 +297,18 @@ int main(void)
   canFilter1.FilterBank = 0;
   canFilter1.FilterActivation = ENABLE;
 
-  HAL_CAN_ConfigFilter(&hcan2, &canFilter1);
-  HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
-  HAL_CAN_Start(&hcan2);
+  HAL_CAN_ConfigFilter(&hcan1, &canFilter1);
+  HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
+  HAL_CAN_Start(&hcan1);
 
   long tick = HAL_GetTick();
   while (1)
   {
-	  if (can2_rx0_flag) {
-		  can2_rx0_flag = 0;
+	  if (can1_rx0_flag) {
+		  can1_rx0_flag = 0;
 
 		  // receive and do something..
+		  printf("yes\n");
 	  }
 
 	  //HAL_GPIO_TogglePin(PWM_CH1_DIR_GPIO_Port, PWM_CH1_DIR_Pin);
@@ -317,21 +334,21 @@ int main(void)
 
 		  speed0 = diff0 / (2048 * 60);
 		  speed1 = diff1 / (2048 * 60);
-		  printf("%d %d %d\n", diff0, diff1, rnd);
+		  //printf("%d %d %d\n", diff0, diff1, rnd);
 	  }
 
 	  canTxHeader.StdId = 0x102;
 	  canTxHeader.RTR = CAN_RTR_DATA;
 	  canTxHeader.IDE = CAN_ID_STD;
 	  canTxHeader.DLC = 8;
-/*
-	  TxMailBox = HAL_CAN_GetTxMailboxesFreeLevel(&hcan2);
-	  can2Tx0Data[0] = (speed0 & 0xFF00) >> 8;
-	  can2Tx0Data[1] = (speed0 & 0x00FF);
-	  can2Tx0Data[2] = (speed1 & 0xFF00) >> 8;
-	  can2Tx0Data[3] = (speed1 & 0x00FF);
- 	  HAL_CAN_AddTxMessage(&hcan2, &canTxHeader, &can2Tx0Data[0], &TxMailBox);
-*/
+
+	  TxMailBox = HAL_CAN_GetTxMailboxesFreeLevel(&hcan1);
+	  can1Tx0Data[0] = (diff0 & 0xFF00) >> 8;
+	  can1Tx0Data[1] = (diff0 & 0x00FF);
+	  can1Tx0Data[2] = (diff1 & 0xFF00) >> 8;
+	  can1Tx0Data[3] = (diff1 & 0x00FF);
+ 	  HAL_CAN_AddTxMessage(&hcan1, &canTxHeader, &can1Tx0Data[0], &TxMailBox);
+
 
     /* USER CODE END WHILE */
 
@@ -388,9 +405,9 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan) {
-	if (hcan->Instance == CAN2) {
-		HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &canRxHeader, &can2Rx0Data[0]);
-		can2_rx0_flag = 1;
+	if (hcan->Instance == CAN1) {
+		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &canRxHeader, &can1Rx0Data[0]);
+		can1_rx0_flag = 1;
 	}
 }
 /* USER CODE END 4 */
