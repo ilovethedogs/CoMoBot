@@ -16,3 +16,22 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64
 
 !ENTRY org.eclipse.cdt.core 1 0 2022-07-04 20:42:05.276
 !MESSAGE Indexed 'tof' (19 sources, 81 headers) in 7.6 sec: 4,508 declarations; 21,621 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.0077%)
+!SESSION 2022-07-05 11:16:25.963 -----------------------------------------------
+eclipse.buildId=Version 1.10.0
+java.version=11.0.14.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\GitHub\CoMoBot\tof\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\GitHub\CoMoBot\tof\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2022-07-05 11:20:24.645
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-07-05 11:20:24.782
+!MESSAGE Log4j initialized with config file C:\GitHub\CoMoBot\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-07-05 11:20:35.484
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-07-05 11:20:45.511
+!MESSAGE Indexed 'tof' (24 sources, 120 headers) in 5.83 sec: 10,719 declarations; 50,492 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.24%)

@@ -31,6 +31,7 @@ Drivers/VL53L1X/platform/vl53l1_platform.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Drivers/VL53L1X/platform/vl53l1_error_codes.h
 ../Drivers/VL53L1X/platform/vl53l1_platform.h:
 ../Drivers/VL53L1X/platform/vl53l1_types.h:
@@ -63,4 +64,5 @@ Drivers/VL53L1X/platform/vl53l1_platform.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Drivers/VL53L1X/platform/vl53l1_error_codes.h:
