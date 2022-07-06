@@ -36,7 +36,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define dev 0x52
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -45,8 +45,11 @@ I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+uint16_t dev = 0x52;
+
+uint8_t num_of_tof = 1;
+
 uint8_t devs[9] = {
-		0x52,
 		0x54,
 		0x56,
 		0x58,
@@ -54,7 +57,8 @@ uint8_t devs[9] = {
 		0x5C,
 		0x5E,
 		0x60,
-		0x62
+		0x62,
+		0x64
 };
 /* USER CODE END PV */
 
@@ -66,6 +70,7 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void TurnOffAll(void);
 uint8_t TurnOnAt(uint8_t i);
+uint16_t ChangeAddresses(uint8_t num_of_tof);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -108,6 +113,8 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  /*
   uint8_t sensorState = 0;
   uint8_t boot[6] = {66, 79, 79, 84, 10, 0};
   while(sensorState==0){
@@ -119,6 +126,12 @@ int main(void)
   VL53L1X_SensorInit(dev);
   //VL53L1X_SetI2CAddress(dev, dev1);
   VL53L1X_StartRanging(dev1);
+  */
+  uint8_t fail[6] = {70, 65, 73, 76, 10, 0};
+  uint8_t suc = 0;
+  if (!(suc = ChangeAddresses(1))) {
+	  HAL_UART_Transmit(&huart2, fail, 6, 10);
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -129,6 +142,7 @@ int main(void)
   uint16_t dis = 0;
   while (1)
   {
+	  /*
 	  while (dataReady == 0){
 		  VL53L1X_CheckForDataReady(dev1, &dataReady);
 		  //HAL_UART_Transmit(&huart2, getting, 6, 10);
@@ -140,6 +154,7 @@ int main(void)
 	  printf("%d\n", dis);
 	  dataReady = 0;
 	  HAL_Delay(50);
+	  */
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -334,7 +349,7 @@ uint8_t TurnOnAt(uint8_t i) {
 	case 0:
 		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_2, GPIO_PIN_SET);
 		while(bootState==0){
-			VL53L1X_BootState(dev[0], &sensorState);
+			VL53L1X_BootState(dev, &bootState);
 			HAL_UART_Transmit(&huart2, boot, 7, 10);
 			HAL_Delay(2);
 		}
@@ -343,36 +358,93 @@ uint8_t TurnOnAt(uint8_t i) {
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
 		boot[4] = 49;
 		while(bootState==0){
-			VL53L1X_BootState(dev[1], &sensorState);
+			VL53L1X_BootState(dev, &bootState);
 			HAL_UART_Transmit(&huart2, boot, 7, 10);
 			HAL_Delay(2);
 		}
 		break;
 	case 2:
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_2, GPIO_PIN_RESET);
+		boot[4] = 50;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	case 3:
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_RESET);
+		boot[4] = 51;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	case 4:
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, GPIO_PIN_RESET);
+		boot[4] = 52;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	case 5:
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
+		boot[4] = 53;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	case 6:
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, GPIO_PIN_RESET);
+		boot[4] = 54;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	case 7:
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, GPIO_PIN_RESET);
+		boot[4] = 55;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	case 8:
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET);
+		boot[4] = 56;
+		while(bootState==0){
+			VL53L1X_BootState(dev, &bootState);
+			HAL_UART_Transmit(&huart2, boot, 7, 10);
+			HAL_Delay(2);
+		}
 		break;
 	default:
+		;
 		// shit
 	}
 	return bootState;
+}
+
+uint16_t ChangeAddresses(uint8_t num_of_tof) {
+	uint8_t success = 1;
+	TurnOffAll();
+	HAL_Delay(10);
+	for (uint8_t i = 0; i != num_of_tof + 1; ++i) {
+		success *= TurnOnAt(i);
+		HAL_Delay(5);
+		VL53L1X_SensorInit(dev);
+		success *= VL53L1X_SetI2CAddress(dev, devs[i]);
+		success *= VL53L1X_StartRanging(devs[i]);
+	}
+	return success;
 }
 /* USER CODE END 4 */
 
