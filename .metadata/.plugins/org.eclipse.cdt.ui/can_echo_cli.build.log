@@ -1,0 +1,10 @@
+23:41:56 **** Build of configuration Debug for project can_echo_cli ****
+make -j8 all 
+arm-none-eabi-size   can_echo_cli.elf 
+   text	   data	    bss	    dec	    hex	filename
+  13380	     28	   1788	  15196	   3b5c	can_echo_cli.elf
+Finished building: default.size.stdout
+ 
+
+23:41:56 Build Finished. 0 errors, 0 warnings. (took 322ms)
+
