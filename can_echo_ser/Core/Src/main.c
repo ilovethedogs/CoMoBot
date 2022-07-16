@@ -62,12 +62,17 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void CanSendMssg(uint8_t len, uint8_t data[len]);
 void CanRecvMssg(void);
-void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+	uint8_t gotit[8] = {71, 79, 84, 73, 84, 13, 10, 0};
+	HAL_UART_Transmit(&huart2, gotit, 8, 10);
+	CanRecvMssg();
+	//CanSendMssg(8, hello);
+}
 /* USER CODE END 0 */
 
 /**
@@ -179,13 +184,13 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 420;
+  hcan1.Init.Prescaler = 21;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
   hcan1.Init.TimeSeg1 = CAN_BS1_14TQ;
   hcan1.Init.TimeSeg2 = CAN_BS2_5TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = ENABLE;
+  hcan1.Init.AutoBusOff = DISABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
   hcan1.Init.AutoRetransmission = ENABLE;
   hcan1.Init.ReceiveFifoLocked = DISABLE;
@@ -198,12 +203,12 @@ static void MX_CAN1_Init(void)
   sFilterConfig.FilterBank = 0;
   sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
   sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-  sFilterConfig.FilterIdHigh = 0x0000;
+  sFilterConfig.FilterIdHigh = 0x0000 << 5;
   sFilterConfig.FilterIdLow = 0x0000;
-  sFilterConfig.FilterMaskIdHigh = 0x0000;
+  sFilterConfig.FilterMaskIdHigh = 0x0000 << 5;
   sFilterConfig.FilterMaskIdLow = 0x0000;
-  sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
-  sFilterConfig.FilterActivation = ENABLE;
+  sFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+  sFilterConfig.FilterActivation = CAN_FILTER_ENABLE;
   sFilterConfig.SlaveStartFilterBank = 14;
 
   if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
@@ -272,13 +277,12 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
 
 }
 
 /* USER CODE BEGIN 4 */
 void CanSendMssg(uint8_t len, uint8_t data[len]) {
-	  TxHeader.StdId = 0x11;
+	  TxHeader.StdId = 0x446;
 	  TxHeader.RTR = CAN_RTR_DATA;
 	  TxHeader.IDE = CAN_ID_STD;
 	  TxHeader.DLC = len;
@@ -333,13 +337,7 @@ void CanRecvMssg(void) {
 	//return HAL_OK; /* Test Passed */
 }
 
-void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
-{
-	uint8_t gotit[8] = {71, 79, 84, 73, 84, 13, 10, 0};
-	HAL_UART_Transmit(&huart2, gotit, 8, 10);
-	CanRecvMssg();
-	CanSendMssg(8, hello);
-}
+
 /* USER CODE END 4 */
 
 /**

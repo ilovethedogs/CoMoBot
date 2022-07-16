@@ -59,18 +59,15 @@ volatile float speed0 = 0.0f;
 volatile float speed1 = 0.0f;
 volatile int rnd = 0;
 
-volatile float desired_speed0 = 0.0f;
-volatile float desired_speed1 = 0.0f;
-
 volatile float set_speed0 = 0.0f;
 volatile float set_speed1 = 0.0f;
 
 uint16_t dev = 0x52;
-uint16_t dis = 0;
+volatile uint16_t dis = 0;
 
-float Kp = 0.3f;
-float Ki = 0.3f;
-float Kd = 0.3f;
+float Kp = 1.0f;
+float Ki = 0.9f;
+float Kd = 0.9f;
 
 float right_before_error0 = 0.0f;
 float right_before_error1 = 0.0f;
@@ -98,14 +95,6 @@ int _write(int file, char* p, int len) {
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void setLeftCCR(uint32_t ccr) {
-
-}
-
-void setRightCCR(uint32_t ccr) {
-
-}
-
 void setLeftMotorSpeed(float speed) {
 	if (speed < 0.0f) {
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
@@ -117,8 +106,8 @@ void setLeftMotorSpeed(float speed) {
 	}
 
 	 //uint32_t ccr = (uint32_t) speed * 20;
-	 printf("ccr: %u ", ccr0);
 	 if (ccr0 > TIM1->ARR) ccr0 = TIM1->ARR;
+	 printf("%d\r\n", ccr0);
 	 TIM1->CCR2 = ccr0;
 	 //HAL_Delay(50);
 }
@@ -134,38 +123,54 @@ void setRightMotorSpeed(float speed) {
 
 
 	 //uint32_t ccr = (uint32_t) speed * 20;
-	 printf("%u\r\n", ccr1);
 	 if (ccr1 > TIM1->ARR) ccr1 = TIM1->ARR;
 	 TIM1->CCR1 = ccr1;
 	 //HAL_Delay(50);
 }
 
-void controlLeftSpeed(void) {
+void controlLeftSpeed(float desired_speed0) {
 	float error0 = desired_speed0 - speed0;
 
 	float e1 = error0 - right_before_error0;
 	float e2 = error0 - right_before_error0 + before_error0;
 	float u = Kp * e1 + Ki * error0 + Kd * e2;
-	set_speed0 = speed0 + u;
 	ccr0 += u;
-	printf("s0: %f\r\n", set_speed0);
-	setLeftMotorSpeed(set_speed0);
+	printf("%f\r\n", desired_speed0);
+	setLeftMotorSpeed(desired_speed0);
 	before_error0 = right_before_error0;
 	right_before_error0 = error0;
 }
 
-void controlRightSpeed(void) {
+void controlRightSpeed(float desired_speed1) {
 	float error1 = desired_speed1 - speed1;
 
 	float e1 = error1 - right_before_error1;
 	float e2 = error1 - right_before_error1 + before_error1;
 	float u = Kp * e1 + Ki * error1 + Kd * e2;
-	set_speed1 = speed1 + u;
 	ccr1 += u;
-	printf("s1: %f\r\n", set_speed1);
-	setRightMotorSpeed(set_speed1);
+	setRightMotorSpeed(desired_speed1);
 	before_error1 = right_before_error1;
 	right_before_error1 = error1;
+}
+
+void rampLeft(float desired_speed0) {
+	float e = desired_speed0 - speed0;
+	set_speed0 = speed0;
+	float dx = e / 20;
+	for (int i = 0; i != 20; ++i) {
+		controlLeftSpeed((set_speed0 += dx));
+		HAL_Delay(50);
+	}
+}
+
+void rampRight(float desired_speed1) {
+	float e = desired_speed1 - speed1;
+	set_speed1 = speed1;
+	float dx = e / 20;
+	for (int i = 0; i != 20; ++i) {
+		controlRightSpeed((set_speed1 += dx));
+		HAL_Delay(50);
+	}
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -176,7 +181,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	}
 	  VL53L1X_GetDistance(dev, &dis);
 	  VL53L1X_ClearInterrupt(dev);
-	  desired_speed0 = desired_speed1 = (float) dis;
 	 // controlLeftSpeed();
 	 // controlRightSpeed();
 	  //printf("desired: %f %f\r\n", desired_speed0, desired_speed1);
@@ -322,9 +326,9 @@ int main(void)
 
 		  speed0 = diff0 * 0.0054931640625 * 10;
 		  speed1 = diff1 * 0.0054931640625 * 10;
-		  printf("%f %f\r\n", speed0, speed1);
-		  controlLeftSpeed();
-		  controlRightSpeed();
+		  printf("%f %f %d\r\n", speed0, speed1, dis);
+		  //rampLeft(0.0); rampRight(0.0);
+		  controlLeftSpeed(dis); controlRightSpeed(dis);
 	  }
     /* USER CODE END WHILE */
 

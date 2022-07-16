@@ -62,7 +62,7 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 void CanSendMssg(uint8_t len, uint8_t data[len]);
 void CanRecvMssg(void);
-void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan);
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -108,6 +108,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   CanSendMssg(8, hello);
   uint8_t nomssg[8] = {78, 79, 77, 83, 83, 13, 10, 0};
+  uint32_t a = 0;
   while (1)
   {
 	  /*
@@ -116,6 +117,10 @@ int main(void)
 		  while (HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) == 0) {}
 	  }
 	  */
+	  a = HAL_CAN_IsSleepActive(&hcan1);
+	  if (a == 1U) HAL_UART_Transmit(&huart2, nomssg, 8, 10);
+	  CanSendMssg(8, hello);
+	  HAL_Delay(50);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -186,15 +191,15 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 420;
+  hcan1.Init.Prescaler = 21;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
   hcan1.Init.TimeSeg1 = CAN_BS1_14TQ;
   hcan1.Init.TimeSeg2 = CAN_BS2_5TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = ENABLE;
+  hcan1.Init.AutoBusOff = DISABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
-  hcan1.Init.AutoRetransmission = DISABLE;
+  hcan1.Init.AutoRetransmission = ENABLE;
   hcan1.Init.ReceiveFifoLocked = DISABLE;
   hcan1.Init.TransmitFifoPriority = DISABLE;
   if (HAL_CAN_Init(&hcan1) != HAL_OK)
@@ -202,22 +207,23 @@ static void MX_CAN1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN1_Init 2 */
-  	sFilterConfig.FilterBank = 0;
+  	sFilterConfig.FilterBank = 18;
     sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
     sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
-    sFilterConfig.FilterIdHigh = 0x0000;
+    sFilterConfig.FilterIdHigh = 0x0000 << 5;
     sFilterConfig.FilterIdLow = 0x0000;
-    sFilterConfig.FilterMaskIdHigh = 0x0000;
+    sFilterConfig.FilterMaskIdHigh = 0x0000 << 5;
     sFilterConfig.FilterMaskIdLow = 0x0000;
-    sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
-    sFilterConfig.FilterActivation = ENABLE;
-    sFilterConfig.SlaveStartFilterBank = 14;
+    sFilterConfig.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+    sFilterConfig.FilterActivation = CAN_FILTER_ENABLE;
+    sFilterConfig.SlaveStartFilterBank = 20;
 
+    /*
     if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
     {
-      /* Filter configuration Error */
       Error_Handler();
     }
+    */
 
     if (HAL_CAN_Start(&hcan1) != HAL_OK)
     {
@@ -285,13 +291,20 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void CanSendMssg(uint8_t len, uint8_t data[len]) {
-	  TxHeader.StdId = 0x17;
+	  TxHeader.StdId = 0x321;
+	  TxHeader.ExtId = 0x01;
 	  TxHeader.RTR = CAN_RTR_DATA;
 	  TxHeader.IDE = CAN_ID_STD;
-	  TxHeader.DLC = 2;
+	  TxHeader.DLC = 8;
 	  TxHeader.TransmitGlobalTime = DISABLE;
 	  TxData[0] = 0xCA;
 	  TxData[1] = 0xFE;
+	  TxData[2] = 0;
+	  TxData[3] = 0;
+	  TxData[4] = 0;
+	  TxData[5] = 0;
+	  TxData[6] = 0;
+	  TxData[7] = 0;
 
 	  uint8_t trysend[10] = {84, 82, 89, 83, 69, 78, 68, 13, 10, 0};
 	  HAL_UART_Transmit(&huart2, trysend, 10, 10);
@@ -311,7 +324,7 @@ void CanSendMssg(uint8_t len, uint8_t data[len]) {
 
 	  uint8_t pend[7] = {80, 69, 78, 68, 13, 10, 0};
 	  while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 3) {
-	  		  HAL_UART_Transmit(&huart2, pend, 7, 10);
+	  		HAL_UART_Transmit(&huart2, pend, 7, 10);
 	  }
 
 	  //return HAL_OK; /* Test Passed */
@@ -345,7 +358,7 @@ void CanRecvMssg(void) {
 	//return HAL_OK; /* Test Passed */
 }
 
-void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 	uint8_t gotit[8] = {71, 79, 84, 73, 84, 13, 10, 0};
 	HAL_UART_Transmit(&huart2, gotit, 8, 10);

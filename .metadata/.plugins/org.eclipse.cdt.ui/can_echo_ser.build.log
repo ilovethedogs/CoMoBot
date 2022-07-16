@@ -1,10 +1,10 @@
-23:40:53 **** Incremental Build of configuration Debug for project can_echo_ser ****
+20:55:14 **** Incremental Build of configuration Debug for project can_echo_ser ****
 make -j8 all 
 arm-none-eabi-size   can_echo_ser.elf 
    text	   data	    bss	    dec	    hex	filename
-  13308	     28	   1788	  15124	   3b14	can_echo_ser.elf
+  12536	     20	   1756	  14312	   37e8	can_echo_ser.elf
 Finished building: default.size.stdout
  
 
-23:40:54 Build Finished. 0 errors, 0 warnings. (took 324ms)
+20:55:14 Build Finished. 0 errors, 0 warnings. (took 306ms)
 

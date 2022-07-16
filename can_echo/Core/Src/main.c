@@ -44,12 +44,17 @@ CAN_HandleTypeDef hcan1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-CAN_TxHeaderTypeDef   TxHeader;
-CAN_RxHeaderTypeDef   RxHeader;
-uint8_t               TxData[8];
-uint8_t               RxData[8];
-uint32_t              TxMailbox;
-CAN_FilterTypeDef     sFilterConfig;
+//CAN1
+CAN_FilterTypeDef canFilter1;
+CAN_RxHeaderTypeDef can1RxHeader;
+CAN_TxHeaderTypeDef can1TxHeader;
+
+// Related to CAN commuication
+uint8_t can1Rx0Data[8];
+uint32_t TxMailBox1;
+uint8_t can1Tx0Data[8];
+volatile uint8_t can1_rx0_flag = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,6 +66,9 @@ static void MX_USART2_UART_Init(void);
 void CanSendMssg(void);
 void CanRecvMssg(void);
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan);
+void CAN_Filter_Init(void);
+void CAN_Send(uint8_t ID, uint8_t data0, uint8_t data1, uint8_t data2, uint8_t data3, uint8_t data4, uint8_t data5, uint8_t data6, uint8_t data7);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -99,7 +107,7 @@ int main(void)
   MX_CAN1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  CAN_Filter_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,10 +115,18 @@ int main(void)
   uint8_t outer[6] = {79, 85, 84, 13, 10, 0};
   while (1)
   {
-	  CanSendMssg();
+	  //CanSendMssg();
 	  //CanRecvMssg();
-	  HAL_UART_Transmit(&huart2, outer, 6, 10);
-	  HAL_Delay(1000);
+	  //HAL_UART_Transmit(&huart2, outer, 6, 10);
+	  //HAL_Delay(1000);
+	  CAN_Send(0x10, 0, 2, 3, 4, 5, 6, 7, 0);
+
+	  if (can1_rx0_flag == 1) {
+		  can1_rx0_flag = 0;
+		  HAL_UART_Transmit(&huart2, outer, 6, 10);
+	  }
+
+	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -135,17 +151,23 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 8;
-  RCC_OscInitStruct.PLL.PLLN = 168;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = 4;
+  RCC_OscInitStruct.PLL.PLLN = 180;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 2;
   RCC_OscInitStruct.PLL.PLLR = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Activate the Over-Drive mode
+  */
+  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
@@ -181,13 +203,13 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 21;
+  hcan1.Init.Prescaler = 18;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_14TQ;
-  hcan1.Init.TimeSeg2 = CAN_BS2_5TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_2TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
-  hcan1.Init.AutoBusOff = DISABLE;
+  hcan1.Init.AutoBusOff = ENABLE;
   hcan1.Init.AutoWakeUp = DISABLE;
   hcan1.Init.AutoRetransmission = ENABLE;
   hcan1.Init.ReceiveFifoLocked = DISABLE;
@@ -197,6 +219,7 @@ static void MX_CAN1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN1_Init 2 */
+  /*
   sFilterConfig.FilterBank = 0;
   sFilterConfig.FilterMode = CAN_FILTERMODE_IDMASK;
   sFilterConfig.FilterScale = CAN_FILTERSCALE_32BIT;
@@ -210,21 +233,19 @@ static void MX_CAN1_Init(void)
 
   if(HAL_CAN_ConfigFilter(&hcan1, &sFilterConfig) != HAL_OK)
   {
-    /* Filter configuration Error */
     Error_Handler();
   }
 
   if (HAL_CAN_Start(&hcan1) != HAL_OK)
   {
-    /* Start Error */
     Error_Handler();
   }
 
   if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
   {
-    /* Notification Error */
     Error_Handler();
   }
+  */
   /* USER CODE END CAN1_Init 2 */
 
 }
@@ -271,13 +292,68 @@ static void MX_GPIO_Init(void)
 {
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
 }
 
 /* USER CODE BEGIN 4 */
+void CAN_Filter_Init(void)
+{
+	//Set the CAN Filter which has Mask Ids
+	//CAN Filter1
+	//Receiving CAN data via 0x102~0x10E
+	canFilter1.FilterMaskIdHigh = 0x7F3 << 5; // Shift 5 bit
+	canFilter1.FilterIdHigh = 0x106 << 5;
+	canFilter1.FilterMaskIdLow = 0x7F3 << 5; // Shift 5 bit
+	canFilter1.FilterIdLow = 0x106 << 5;
+	canFilter1.FilterMode = CAN_FILTERMODE_IDMASK;
+	canFilter1.FilterScale = CAN_FILTERSCALE_16BIT;
+	canFilter1.FilterFIFOAssignment = CAN_FILTER_FIFO0;
+	canFilter1.FilterBank = 0;
+	canFilter1.FilterActivation = ENABLE;
+
+	/* Set options for messages; ID type(standard), Length(8 byte) */
+	can1TxHeader.RTR = CAN_RTR_DATA;
+	can1TxHeader.IDE = CAN_ID_STD;
+	can1TxHeader.DLC = 8;
+
+	HAL_CAN_ConfigFilter(&hcan1, &canFilter1);
+	HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
+	HAL_CAN_Start(&hcan1);
+}
+
+void CAN_Send(uint8_t ID, uint8_t data0, uint8_t data1, uint8_t data2, uint8_t data3, uint8_t data4, uint8_t data5, uint8_t data6, uint8_t data7)
+{
+	  /* Set options for messages; Address */
+	  can1TxHeader.StdId = ID;
+
+	  can1Tx0Data[7] = 21;
+	  can1Tx0Data[6] = 56;
+	  can1Tx0Data[5] = 54;
+	  can1Tx0Data[4] = 27;
+	  can1Tx0Data[3] = 89;
+	  can1Tx0Data[2] = 211;
+	  can1Tx0Data[1] = 243;
+	  can1Tx0Data[0] = 23;
+
+	  TxMailBox1 = HAL_CAN_GetTxMailboxesFreeLevel(&hcan1);
+	  HAL_CAN_AddTxMessage(&hcan1, &can1TxHeader, &can1Tx0Data[0], &TxMailBox1);
+}
+
+/* Receiving CAN Data */
+/* Get CAN1 message Through FIFO0 */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+	if(hcan->Instance == CAN1)
+	{
+		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &can1RxHeader, &can1Rx0Data[0]);
+
+		can1_rx0_flag = 1;
+	}
+
+}
+/*
 void CanSendMssg(void) {
 	  TxHeader.StdId = 0x11;
 	  TxHeader.RTR = CAN_RTR_DATA;
@@ -299,11 +375,11 @@ void CanSendMssg(void) {
 	  uint8_t sendfail[11] = {83, 69, 78, 68, 70, 65, 73, 76, 13, 10, 0};
 	  if(HAL_CAN_AddTxMessage(&hcan1, &TxHeader, TxData, &TxMailbox) != HAL_OK)
 	  {
-	    /* Transmission request Error */
+
 		HAL_UART_Transmit(&huart2, sendfail, 11, 10);
 	  }
 
-	  //return HAL_OK; /* Test Passed */
+	  //return HAL_OK;
 }
 
 void CanRecvMssg(void) {
@@ -316,7 +392,7 @@ void CanRecvMssg(void) {
 	uint8_t recvfail[11] = {82, 69, 67, 86, 70, 65, 73, 76, 13, 10, 0};
 	if(HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
 	{
-	    /* Reception Error */
+
 		HAL_UART_Transmit(&huart2, recvfail, 11, 10);
 	}
 
@@ -325,19 +401,21 @@ void CanRecvMssg(void) {
 	   (RxHeader.IDE != CAN_ID_STD)                 ||
 	   (RxHeader.DLC != 2))
 	{
-	    /* Rx message Error */
+
 		//return HAL_ERROR;
 	}
 
 	HAL_UART_Transmit(&huart2, RxData, 2, 10);
 
-	//return HAL_OK; /* Test Passed */
+	//return HAL_OK;
 }
-
+*/
+/*
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 	CanRecvMssg();
 }
+*/
 /* USER CODE END 4 */
 
 /**

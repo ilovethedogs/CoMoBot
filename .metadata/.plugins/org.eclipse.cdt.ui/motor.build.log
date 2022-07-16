@@ -1,10 +1,45 @@
-10:11:59 **** Incremental Build of configuration Debug for project motor ****
+22:24:48 **** Incremental Build of configuration Debug for project motor ****
 make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/GitHub/CoMoBot/motor/Drivers/VL53L1X/core" -I"C:/GitHub/CoMoBot/motor/Drivers/VL53L1X/platform" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function '_write':
+../Core/Src/main.c:91:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+   91 |  HAL_UART_Transmit(&huart2, p, len, 16);
+      |                             ^
+      |                             |
+      |                             char *
+In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:722:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'char *'
+  722 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~~~~~~~^~~~~
+../Core/Src/main.c: In function 'setLeftMotorSpeed':
+../Core/Src/main.c:110:12: warning: format '%d' expects argument of type 'int', but argument 2 has type 'long int' [-Wformat=]
+  110 |   printf("%d\r\n", ccr0);
+      |           ~^       ~~~~
+      |            |       |
+      |            int     long int
+      |           %ld
+../Core/Src/main.c: In function 'HAL_GPIO_EXTI_Callback':
+../Core/Src/main.c:182:29: warning: passing argument 2 of 'VL53L1X_GetDistance' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  182 |    VL53L1X_GetDistance(dev, &dis);
+      |                             ^~~~
+In file included from ../Core/Src/main.c:24:
+C:/GitHub/CoMoBot/motor/Drivers/VL53L1X/core/VL53L1X_api.h:249:59: note: expected 'uint16_t *' {aka 'short unsigned int *'} but argument is of type 'volatile uint16_t *' {aka 'volatile short unsigned int *'}
+  249 | VL53L1X_ERROR VL53L1X_GetDistance(uint16_t dev, uint16_t *distance);
+      |                                                 ~~~~~~~~~~^~~~~~~~
+arm-none-eabi-gcc -o "motor.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\GitHub\CoMoBot\motor\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="motor.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: motor.elf
+ 
 arm-none-eabi-size   motor.elf 
+arm-none-eabi-objdump -h -S  motor.elf  > "motor.list"
    text	   data	    bss	    dec	    hex	filename
-  37356	    508	   2284	  40148	   9cd4	motor.elf
+  37244	    508	   2268	  40020	   9c54	motor.elf
 Finished building: default.size.stdout
  
+Finished building: motor.list
+ 
 
-10:12:00 Build Finished. 0 errors, 0 warnings. (took 814ms)
+22:24:49 Build Finished. 0 errors, 3 warnings. (took 1s.132ms)
 

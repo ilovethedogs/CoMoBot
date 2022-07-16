@@ -88,7 +88,7 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)
   if(hcan->Instance==CAN1)
   {
   /* USER CODE BEGIN CAN1_MspInit 0 */
-
+	  __HAL_RCC_CAN2_CLK_ENABLE();
   /* USER CODE END CAN1_MspInit 0 */
     /* Peripheral clock enable */
     __HAL_RCC_CAN1_CLK_ENABLE();

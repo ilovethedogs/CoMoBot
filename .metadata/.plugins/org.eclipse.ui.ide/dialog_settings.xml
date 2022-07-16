@@ -9,6 +9,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\GitHub\CoMoBot\tof"/>
 			<item value="C:\GitHub\CoMoBot\motor"/>
 			<item value="C:\GitHub\CoMoBot\can_echo_ser"/>
 			<item value="C:\GitHub\CoMoBot\can_echo_cli"/>

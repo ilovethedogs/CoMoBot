@@ -1,0 +1,24 @@
+19:42:06 **** Incremental Build of configuration Debug for project can_test2 ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/GitHub/CoMoBot/can_test2/Drivers/VL53L1X/core" -I"C:/GitHub/CoMoBot/can_test2/Drivers/VL53L1X/platform" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'CanRecvMssg':
+../Core/Src/main.c:387:10: warning: unused variable 'recvfail' [-Wunused-variable]
+  387 |  uint8_t recvfail[11] = {82, 69, 67, 86, 70, 65, 73, 76, 13, 10, 0};
+      |          ^~~~~~~~
+../Core/Src/main.c:381:10: warning: unused variable 'aa' [-Wunused-variable]
+  381 |  uint8_t aa[7] = {70, 70, 70, 70, 13, 10, 0};
+      |          ^~
+arm-none-eabi-gcc -o "can_test2.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\GitHub\CoMoBot\can_test2\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="can_test2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: can_test2.elf
+ 
+arm-none-eabi-size   can_test2.elf 
+arm-none-eabi-objdump -h -S  can_test2.elf  > "can_test2.list"
+   text	   data	    bss	    dec	    hex	filename
+  19016	     24	   2128	  21168	   52b0	can_test2.elf
+Finished building: default.size.stdout
+ 
+Finished building: can_test2.list
+ 
+
+19:42:07 Build Finished. 0 errors, 2 warnings. (took 1s.140ms)
+

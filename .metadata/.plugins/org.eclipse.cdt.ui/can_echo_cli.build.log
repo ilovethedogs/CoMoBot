@@ -1,10 +1,17 @@
-23:41:56 **** Build of configuration Debug for project can_echo_cli ****
+19:29:49 **** Incremental Build of configuration Debug for project can_echo_cli ****
 make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "can_echo_cli.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\GitHub\CoMoBot\can_echo_cli\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="can_echo_cli.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: can_echo_cli.elf
+ 
 arm-none-eabi-size   can_echo_cli.elf 
+arm-none-eabi-objdump -h -S  can_echo_cli.elf  > "can_echo_cli.list"
    text	   data	    bss	    dec	    hex	filename
-  13380	     28	   1788	  15196	   3b5c	can_echo_cli.elf
+  13176	     28	   1788	  14992	   3a90	can_echo_cli.elf
 Finished building: default.size.stdout
  
+Finished building: can_echo_cli.list
+ 
 
-23:41:56 Build Finished. 0 errors, 0 warnings. (took 322ms)
+19:29:51 Build Finished. 0 errors, 0 warnings. (took 2s.509ms)
 
