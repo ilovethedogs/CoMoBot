@@ -9,6 +9,10 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\GitHub\CoMoBot\Rear_test"/>
+			<item value="C:\GitHub\CoMoBot\Rear"/>
+			<item value="C:\GitHub\CoMoBot\Front"/>
+			<item value="C:\GitHub\motor"/>
 			<item value="C:\Users\woodong\OneDrive - 성균관대학교\문서\모바일로봇\Lidar Delivery"/>
 		</list>
 	</section>

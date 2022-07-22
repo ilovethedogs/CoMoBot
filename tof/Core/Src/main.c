@@ -49,7 +49,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 uint16_t dev = 0x52;
 
-uint8_t nof = 9;
+uint8_t nof = 3;
 
 uint8_t devs[9] = {
 		0x54,
@@ -423,16 +423,28 @@ uint8_t TurnOnAt(uint8_t i) {
 	switch (i) {
 	case 0:
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_SET);
+		HAL_Delay(10);
+		VL53L1X_BootState(dev, &bootState);
 		while(bootState==0){
+			TurnOffAll();
+			HAL_Delay(10);
+			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, GPIO_PIN_SET);
+			HAL_Delay(10);
 			VL53L1X_BootState(dev, &bootState);
 			HAL_UART_Transmit(&huart2, boot, 7, 10);
 			HAL_Delay(2);
 		}
 		break;
 	case 1:
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, GPIO_PIN_SET);
 		boot[4] = 49;
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, GPIO_PIN_SET);
+		HAL_Delay(10);
+		VL53L1X_BootState(dev, &bootState);
 		while(bootState==0){
+			TurnOffAll();
+			HAL_Delay(10);
+			HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, GPIO_PIN_SET);
+			HAL_Delay(10);
 			VL53L1X_BootState(dev, &bootState);
 			HAL_UART_Transmit(&huart2, boot, 7, 10);
 			HAL_Delay(2);

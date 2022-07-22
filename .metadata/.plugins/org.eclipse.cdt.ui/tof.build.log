@@ -1,9 +1,9 @@
-21:37:16 **** Incremental Build of configuration Debug for project tof ****
+03:45:05 **** Incremental Build of configuration Debug for project tof ****
 make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/GitHub/CoMoBot/tof/Drivers/VL53L1X/core" -I"C:/GitHub/CoMoBot/tof/Drivers/VL53L1X/platform" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function '_write':
-../Core/Src/main.c:63:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-   63 |  HAL_UART_Transmit(&huart2, p, len, 16);
+../Core/Src/main.c:91:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+   91 |  HAL_UART_Transmit(&huart2, p, len, 16);
       |                             ^
       |                             |
       |                             char *
@@ -14,24 +14,24 @@ In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:722:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'char *'
   722 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~~~~~~~^~~~~
-../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:117:11: warning: unused variable 'data' [-Wunused-variable]
-  117 |   uint8_t data[6] = {68, 65, 84, 65, 10, 0};
-      |           ^~~~
-../Core/Src/main.c:116:11: warning: unused variable 'getting' [-Wunused-variable]
-  116 |   uint8_t getting[6] = {71, 69, 84, 83, 10, 0};
-      |           ^~~~~~~
+../Core/Src/main.c: In function 'GetAllData':
+../Core/Src/main.c:538:10: warning: unused variable 'success' [-Wunused-variable]
+  538 |  uint8_t success = 1;
+      |          ^~~~~~~
+../Core/Src/main.c:551:1: warning: control reaches end of non-void function [-Wreturn-type]
+  551 | }
+      | ^
 arm-none-eabi-gcc -o "tof.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\GitHub\CoMoBot\tof\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="tof.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: tof.elf
  
 arm-none-eabi-size   tof.elf 
 arm-none-eabi-objdump -h -S  tof.elf  > "tof.list"
    text	   data	    bss	    dec	    hex	filename
-  28384	    124	   1996	  30504	   7728	tof.elf
+  33132	    136	   2112	  35380	   8a34	tof.elf
 Finished building: default.size.stdout
  
 Finished building: tof.list
  
 
-21:37:17 Build Finished. 0 errors, 3 warnings. (took 1s.6ms)
+03:45:06 Build Finished. 0 errors, 3 warnings. (took 1s.62ms)
 
