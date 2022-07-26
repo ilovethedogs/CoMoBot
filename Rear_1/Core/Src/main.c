@@ -56,7 +56,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 uint16_t dev = 0x52;
 
-uint8_t nof = 9;
+uint8_t nof = 1;
 uint16_t* dis = NULL;
 
 uint8_t devs[9] = {
@@ -169,8 +169,8 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  setLeftMotorCCR(0, DIR_FORWARD);
-  setRightMotorCCR(0, DIR_FORWARD);
+  //setLeftMotorCCR(0, DIR_FORWARD);
+  //setRightMotorCCR(0, DIR_FORWARD);
 
   if (!(ChangeAddresses())) {
 	  //HAL_UART_Transmit(&huart2, fail, 6, 10);
@@ -179,6 +179,7 @@ int main(void)
 	  //HAL_UART_Transmit(&huart2, succ, 6, 10);
   }
 
+  HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim3);
   HAL_TIM_Base_Start_IT(&htim4);
   /* USER CODE END 2 */
@@ -266,10 +267,10 @@ static void MX_CAN1_Init(void)
 
   /* USER CODE END CAN1_Init 1 */
   hcan1.Instance = CAN1;
-  hcan1.Init.Prescaler = 50;
+  hcan1.Init.Prescaler = 3;
   hcan1.Init.Mode = CAN_MODE_NORMAL;
   hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan1.Init.TimeSeg1 = CAN_BS1_15TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_12TQ;
   hcan1.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan1.Init.TimeTriggeredMode = DISABLE;
   hcan1.Init.AutoBusOff = ENABLE;
@@ -503,9 +504,9 @@ static void MX_TIM4_Init(void)
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 200-1;
+  htim4.Init.Prescaler = 25-1;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 18450-1;
+  htim4.Init.Period = 3600-1;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -905,14 +906,14 @@ void CAN_Filter_Init(void)
 	//Set the CAN Filter which has Mask Ids
 	//CAN Filter1
 	//Receiving CAN data via 0x102~0x10E
-//	canFilter1.FilterMaskIdHigh = 0x7F3 << 5; // Shift 5 bit
-//	canFilter1.FilterIdHigh = 0x106 << 5;
-//	canFilter1.FilterMaskIdLow = 0x7F3 << 5; // Shift 5 bit
-//	canFilter1.FilterIdLow = 0x106 << 5;
-	canFilter1.FilterMaskIdHigh = 0x000 << 5; // Shift 5 bit
-	canFilter1.FilterIdHigh = 0x000 << 5;
-	canFilter1.FilterMaskIdLow = 0x000 << 5; // Shift 5 bit
-	canFilter1.FilterIdLow = 0x000 << 5;
+	canFilter1.FilterMaskIdHigh = 0x7F3 << 5; // Shift 5 bit
+	canFilter1.FilterIdHigh = 0x106 << 5;
+	canFilter1.FilterMaskIdLow = 0x7F3 << 5; // Shift 5 bit
+	canFilter1.FilterIdLow = 0x106 << 5;
+//	canFilter1.FilterMaskIdHigh = 0x000 << 5; // Shift 5 bit
+//	canFilter1.FilterIdHigh = 0x000 << 5;
+//	canFilter1.FilterMaskIdLow = 0x000 << 5; // Shift 5 bit
+//	canFilter1.FilterIdLow = 0x000 << 5;
 	canFilter1.FilterMode = CAN_FILTERMODE_IDMASK;
 	canFilter1.FilterScale = CAN_FILTERSCALE_16BIT;
 	canFilter1.FilterFIFOAssignment = CAN_FILTER_FIFO0;
@@ -942,7 +943,7 @@ void CAN_Send(uint8_t ID, uint8_t data0, uint8_t data1, uint8_t data2, uint8_t d
 	  can1Tx0Data[2] = data2;
 	  can1Tx0Data[1] = data1;
 	  can1Tx0Data[0] = data0;
-//
+
 //	  can1Tx0Data[7] = 0;
 //	  can1Tx0Data[6] = 10;
 //	  can1Tx0Data[5] = 13;
@@ -958,10 +959,11 @@ void CAN_Send(uint8_t ID, uint8_t data0, uint8_t data1, uint8_t data2, uint8_t d
 
 void CAN_SendAll(void) {
 	CAN_Send(0x10, speed0.i & 0xFF, (speed0.i & 0xFF00) >> 8, (speed0.i & 0xFF0000) >> 16, speed0.i >> 24, speed1.i & 0xFF, (speed1.i & 0xFF00) >> 8, (speed1.i & 0xFF0000) >> 16, speed1.i >> 24);
-	CAN_Send(0x11, dis[0] >> 8, dis[0] & 0xFF, dis[1] >> 8, dis[1] & 0xFF, dis[2] >> 8, dis[2] & 0xFF, 0, 0);
-	CAN_Send(0x11, dis[3] >> 8, dis[3] & 0xFF, dis[4] >> 8, dis[4] & 0xFF, dis[5] >> 8, dis[5] & 0xFF, 0, 0);
-	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) ;
-	CAN_Send(0x11, dis[6] >> 8, dis[6] & 0xFF, dis[7] >> 8, dis[7] & 0xFF, dis[8] >> 8, dis[8] & 0xFF, 0, 0);
+	CAN_Send(0x11, 0, 0, 0, 0, 0, 0, dis[0] >> 8, dis [0] & 0xFF);
+//	CAN_Send(0x11, dis[0] >> 8, dis[0] & 0xFF, dis[1] >> 8, dis[1] & 0xFF, dis[2] >> 8, dis[2] & 0xFF, 0, 0);
+//	CAN_Send(0x11, dis[3] >> 8, dis[3] & 0xFF, dis[4] >> 8, dis[4] & 0xFF, dis[5] >> 8, dis[5] & 0xFF, 0, 0);
+//	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) ;
+//	CAN_Send(0x11, dis[6] >> 8, dis[6] & 0xFF, dis[7] >> 8, dis[7] & 0xFF, dis[8] >> 8, dis[8] & 0xFF, 0, 0);
 }
 
 /* Receiving CAN Data */
@@ -1051,15 +1053,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 				  //printf("b2: ");
 				  diff1 = counter1 - oldCounter1;
 			  }
-
-			  }
+		  }
 		  else {
 			  if (counter1 >= oldCounter1) {
 				  // pure forward
 				  //printf("b3: ");
 				  diff1 = counter1 - oldCounter1;
 			  }
-
 			  else {
 				  // backward -> forward change
 				  //printf("b4: ");
@@ -1075,7 +1075,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	else if (htim == &htim3) {
 		// tof
 		GetAllData();
-		//PrintAllData();
+		PrintAllData();
 	}
 	else if (htim == &htim4) {
 		// CAN

@@ -1,4 +1,4 @@
-00:46:33 **** Build of configuration Debug for project Front ****
+18:46:46 **** Incremental Build of configuration Debug for project Front ****
 make -j8 all 
 arm-none-eabi-size   Front.elf 
    text	   data	    bss	    dec	    hex	filename
@@ -6,5 +6,5 @@ arm-none-eabi-size   Front.elf
 Finished building: default.size.stdout
  
 
-00:46:33 Build Finished. 0 errors, 0 warnings. (took 311ms)
+18:46:47 Build Finished. 0 errors, 0 warnings. (took 384ms)
 

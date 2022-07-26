@@ -1097,9 +1097,9 @@ static void MX_GPIO_Init(void)
  800098c:	683b      	ldr	r3, [r7, #0]
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13|GPIO_PIN_0|GPIO_PIN_2|GPIO_PIN_3
  800098e:	2200      	movs	r2, #0
- 8000990:	f643 411c 	movw	r1, #15388	; 0x3c1c
+ 8000990:	f643 410d 	movw	r1, #15373	; 0x3c0d
  8000994:	4830      	ldr	r0, [pc, #192]	; (8000a58 <MX_GPIO_Init+0x16c>)
  8000996:	f002 f895 	bl	8002ac4 <HAL_GPIO_WritePin>
                           |GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12, GPIO_PIN_RESET);
@@ -1118,10 +1118,10 @@ static void MX_GPIO_Init(void)
  80009a8:	482d      	ldr	r0, [pc, #180]	; (8000a60 <MX_GPIO_Init+0x174>)
  80009aa:	f002 f88b 	bl	8002ac4 <HAL_GPIO_WritePin>
 
-  /*Configure GPIO pins : PC13 PC2 PC3 PC4
+  /*Configure GPIO pins : PC13 PC0 PC2 PC3
                            PC11 PC12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
- 80009ae:	f643 031c 	movw	r3, #14364	; 0x381c
+  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_0|GPIO_PIN_2|GPIO_PIN_3
+ 80009ae:	f643 030d 	movw	r3, #14349	; 0x380d
  80009b2:	617b      	str	r3, [r7, #20]
                           |GPIO_PIN_11|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
@@ -1213,9 +1213,9 @@ static void MX_GPIO_Init(void)
  8000a38:	f001 feb0 	bl	800279c <HAL_GPIO_Init>
 
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 1, 1);
- 8000a3c:	2201      	movs	r2, #1
- 8000a3e:	2101      	movs	r1, #1
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+ 8000a3c:	2200      	movs	r2, #0
+ 8000a3e:	2100      	movs	r1, #0
  8000a40:	2007      	movs	r0, #7
  8000a42:	f001 fe36 	bl	80026b2 <HAL_NVIC_SetPriority>
   HAL_NVIC_EnableIRQ(EXTI1_IRQn);
@@ -2171,7 +2171,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  80010ee:	b082      	sub	sp, #8
  80010f0:	af00      	add	r7, sp, #0
  80010f2:	6078      	str	r0, [r7, #4]
-
 	printf("%d\r\n", dis[0]);
  80010f4:	4b05      	ldr	r3, [pc, #20]	; (800110c <HAL_TIM_PeriodElapsedCallback+0x20>)
  80010f6:	681b      	ldr	r3, [r3, #0]
