@@ -172,12 +172,6 @@ int main(void)
   //setLeftMotorCCR(0, DIR_FORWARD);
   //setRightMotorCCR(0, DIR_FORWARD);
 
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-
-  HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
-  HAL_TIM_Encoder_Start_IT(&htim5, TIM_CHANNEL_ALL);
-
   if (!(ChangeAddresses())) {
 	  //HAL_UART_Transmit(&huart2, fail, 6, 10);
   }
