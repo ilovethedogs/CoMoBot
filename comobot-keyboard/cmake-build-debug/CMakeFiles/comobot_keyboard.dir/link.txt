@@ -1,0 +1,1 @@
+/usr/bin/c++  -DASIO_STANDALONE -pthread -g CMakeFiles/comobot_keyboard.dir/main.cpp.o CMakeFiles/comobot_keyboard.dir/session.cpp.o -o comobot_keyboard 

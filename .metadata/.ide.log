@@ -23817,3 +23817,28 @@
 2022-07-28 16:22:40,966 [INFO] ProjectBuilder:4285 - Time for Generating toolchain IDE Files: 8237mS.
 2022-07-28 16:22:40,969 [INFO] ProjectBuilder:2790 - Time for Copy CMSIS : 1mS.
 2022-07-28 16:22:40,974 [INFO] ProjectBuilder:2790 - Time for Copy CMSIS : 1mS.
+2022-07-28 19:05:04,237 [INFO] Activator:177 - 
+
+
+2022-07-28 19:05:04,239 [INFO] Activator:178 - !SESSION log4j initialized
+2022-07-28 19:24:50,154 [INFO] Activator:177 - 
+
+
+2022-07-28 19:24:50,156 [INFO] Activator:178 - !SESSION log4j initialized
+2022-07-28 19:25:19,608 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2022-07-28 19:25:19,610 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2022-07-28 19:25:19,613 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2022-07-28 19:27:39,238 [INFO] Activator:177 - 
+
+
+2022-07-28 19:27:39,239 [INFO] Activator:178 - !SESSION log4j initialized
+2022-07-28 19:28:11,775 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2022-07-28 19:28:11,776 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2022-07-28 19:28:11,779 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2022-07-28 21:27:36,963 [INFO] Activator:177 - 
+
+
+2022-07-28 21:27:36,965 [INFO] Activator:178 - !SESSION log4j initialized
+2022-07-28 21:28:09,242 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2022-07-28 21:28:09,243 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: Defaulting to no-operation (NOP) logger implementation
+2022-07-28 21:28:09,245 [ERROR] LogOutputStream:74 - [STDERR_REDIRECT] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.

@@ -1,9 +1,9 @@
-19:12:34 **** Incremental Build of configuration Debug for project Rear_1 ****
+21:36:44 **** Incremental Build of configuration Debug for project Rear_1 ****
 make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F446xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I"C:/GitHub/CoMoBot/Rear_1/Drivers/VL53L1X/core" -I"C:/GitHub/CoMoBot/Rear_1/Drivers/VL53L1X/platform" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function '_write':
-../Core/Src/main.c:129:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  129 |  HAL_UART_Transmit(&huart2, p, len, 16);
+../Core/Src/main.c:142:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  142 |  HAL_UART_Transmit(&huart2, p, len, 16);
       |                             ^
       |                             |
       |                             char *
@@ -14,9 +14,19 @@ In file included from ../Core/Inc/stm32f4xx_hal_conf.h:407,
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:722:79: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'char *'
   722 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~~~~~~~^~~~~
+../Core/Src/main.c: In function 'HAL_CAN_RxFifo0MsgPendingCallback':
+../Core/Src/main.c:1009:8: warning: unused variable 'right_speed' [-Wunused-variable]
+ 1009 |  float right_speed = (1 - 2 * left_dir) * ((can1Rx0Data[4] << 24) | (can1Rx0Data[5] << 16) | (can1Rx0Data[6] << 8) | (can1Rx0Data[7]));
+      |        ^~~~~~~~~~~
+../Core/Src/main.c:1008:10: warning: unused variable 'right_dir' [-Wunused-variable]
+ 1008 |  uint8_t right_dir = (can1Rx0Data[4] & 0b1000000) >> 7;
+      |          ^~~~~~~~~
+../Core/Src/main.c:1007:8: warning: unused variable 'left_speed' [-Wunused-variable]
+ 1007 |  float left_speed = (1 - 2 * left_dir) * ((can1Rx0Data[0] << 2) | (can1Rx0Data[1] << 16) | (can1Rx0Data[2] << 8) | (can1Rx0Data[3]));
+      |        ^~~~~~~~~~
 ../Core/Src/main.c: In function 'GetAllData':
-../Core/Src/main.c:895:1: warning: control reaches end of non-void function [-Wreturn-type]
-  895 | }
+../Core/Src/main.c:924:1: warning: control reaches end of non-void function [-Wreturn-type]
+  924 | }
       | ^
 arm-none-eabi-gcc -o "Rear_1.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\GitHub\CoMoBot\Rear_1\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Rear_1.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: Rear_1.elf
@@ -24,11 +34,11 @@ Finished building target: Rear_1.elf
 arm-none-eabi-size   Rear_1.elf 
 arm-none-eabi-objdump -h -S  Rear_1.elf  > "Rear_1.list"
    text	   data	    bss	    dec	    hex	filename
-  40644	    136	   2616	  43396	   a984	Rear_1.elf
+  39156	    136	   2624	  41916	   a3bc	Rear_1.elf
 Finished building: default.size.stdout
  
 Finished building: Rear_1.list
  
 
-19:12:35 Build Finished. 0 errors, 2 warnings. (took 987ms)
+21:36:47 Build Finished. 0 errors, 5 warnings. (took 2s.694ms)
 

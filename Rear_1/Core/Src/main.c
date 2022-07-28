@@ -85,6 +85,15 @@ volatile unsigned int oldCounter0 = 0;
 volatile unsigned int oldCounter1 = 0;
 volatile long diff0 = 0;
 volatile long diff1 = 0;
+
+float Kp = 0.3f;
+float Ki = 0.3f;
+float Kd = 0.3f;
+
+float right_before_error0 = 0.0f;
+float right_before_error1 = 0.0f;
+float before_error0 = 0.0f;
+float before_error1 = 0.0f;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -113,6 +122,8 @@ void CAN_SendAll(void);
 
 void setLeftMotorCCR(uint16_t ccr, uint8_t dir);
 void setRightMotorCCR(uint16_t ccr, uint8_t dir);
+void controlLeftSpeed(float desired_speed0);
+void controlRightSpeed(float desired_speed1);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -124,6 +135,8 @@ union Speedtype {
 
 union Speedtype speed0;
 union Speedtype speed1;
+union Speedtype desired_speed0;
+union Speedtype desired_speed1;
 
 int _write(int file, char* p, int len) {
 	HAL_UART_Transmit(&huart2, p, len, 16);
@@ -172,18 +185,18 @@ int main(void)
   //setLeftMotorCCR(0, DIR_FORWARD);
   //setRightMotorCCR(0, DIR_FORWARD);
 
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-
-  HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
-  HAL_TIM_Encoder_Start_IT(&htim5, TIM_CHANNEL_ALL);
-
   if (!(ChangeAddresses())) {
 	  //HAL_UART_Transmit(&huart2, fail, 6, 10);
   }
   else {
 	  //HAL_UART_Transmit(&huart2, succ, 6, 10);
   }
+
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+
+  HAL_TIM_Encoder_Start_IT(&htim2, TIM_CHANNEL_ALL);
+  HAL_TIM_Encoder_Start_IT(&htim5, TIM_CHANNEL_ALL);
 
   HAL_TIM_Base_Start_IT(&htim7);
   HAL_TIM_Base_Start_IT(&htim3);
@@ -194,13 +207,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-//	GetAllData();
-//	PrintAllData();
-//	HAL_Delay(50);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
+    free(dis);
   /* USER CODE END 3 */
 }
 
@@ -977,7 +988,7 @@ void CAN_Send(uint8_t ID, uint8_t data0, uint8_t data1, uint8_t data2, uint8_t d
 
 void CAN_SendAll(void) {
 	CAN_Send(0x10, speed0.i & 0xFF, (speed0.i & 0xFF00) >> 8, (speed0.i & 0xFF0000) >> 16, speed0.i >> 24, speed1.i & 0xFF, (speed1.i & 0xFF00) >> 8, (speed1.i & 0xFF0000) >> 16, speed1.i >> 24);
-	CAN_Send(0x11, 0, 0, 0, 0, 0, 0, dis[0] >> 8, dis [0] & 0xFF);
+	//CAN_Send(0x11, 0, 0, 0, 0, 0, 0, dis[0] >> 8, dis [0] & 0xFF);
 //	CAN_Send(0x11, dis[0] >> 8, dis[0] & 0xFF, dis[1] >> 8, dis[1] & 0xFF, dis[2] >> 8, dis[2] & 0xFF, 0, 0);
 //	CAN_Send(0x11, dis[3] >> 8, dis[3] & 0xFF, dis[4] >> 8, dis[4] & 0xFF, dis[5] >> 8, dis[5] & 0xFF, 0, 0);
 //	while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) ;
@@ -989,12 +1000,12 @@ void CAN_SendAll(void) {
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 	HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &can1RxHeader, can1Rx0Data);
-	uint8_t left_dir = can1Rx0Data[0];
-	uint16_t left_ccr = can1Rx0Data[1] << 8 | can1Rx0Data[2];
-	uint8_t right_dir = can1Rx0Data[3];
-	uint16_t right_ccr = can1Rx0Data[4] << 8 | can1Rx0Data[5];
-	setLeftMotorCCR(left_ccr, left_dir);
-	setRightMotorCCR(right_ccr, right_dir);
+	uint8_t left_dir = (can1Rx0Data[0] & 0b1000000) >> 7;
+	float left_speed = (1 - 2 * left_dir) * ((can1Rx0Data[0] << 2) | (can1Rx0Data[1] << 16) | (can1Rx0Data[2] << 8) | (can1Rx0Data[3]));
+	uint8_t right_dir = (can1Rx0Data[4] & 0b1000000) >> 7;
+	float right_speed = (1 - 2 * left_dir) * ((can1Rx0Data[4] << 24) | (can1Rx0Data[5] << 16) | (can1Rx0Data[6] << 8) | (can1Rx0Data[7]));
+//	setLeftMotorCCR(left_ccr, left_dir);
+//	setRightMotorCCR(right_ccr, right_dir);
 	printf("yes\r\n");
 }
 
@@ -1022,12 +1033,35 @@ void setRightMotorCCR(uint16_t ccr, uint8_t dir) {
 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET);
 	}
 
-
 	 //uint32_t ccr = (uint32_t) speed * 20;
 	 if (ccr > TIM1->ARR) ccr = TIM1->ARR;
 	 TIM1->CCR1 = ccr;
 	 //HAL_Delay(50);
 }
+
+/*
+void controlLeftSpeed(float desired_speed0) {
+    float error0 = desired_speed0 - speed0;
+
+    float e1 = error0 - right_before_error0;
+    float e2 = error0 - right_before_error0 + before_error0;
+    float u = Kp * e1 + Ki * error0 + Kd * e2;
+    setLeftMotorSpeed(TIM1->CCR1 + u);
+    before_error0 = right_before_error0;
+    right_before_error0 = error0;
+}
+
+void controlRightSpeed(float desired_speed1) {
+    float error1 = desired_speed1 - speed1;
+
+    float e1 = error1 - right_before_error1;
+    float e2 = error1 - right_before_error1 + before_error1;
+    float u = Kp * e1 + Ki * error1 + Kd * e2;
+    setRightMotorSpeed(TIM1->CCR2 + u);
+    before_error1 = right_before_error1;
+    right_before_error1 = error1;
+}
+*/
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim == &htim7) {
@@ -1087,8 +1121,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		  oldCounter0 = __HAL_TIM_GET_COUNTER(&htim2);
 		  oldCounter1 = __HAL_TIM_GET_COUNTER(&htim5);
 
-		  speed0.fl = diff0 * 0.0054931640625 * 90.9091;
-		  speed1.fl = diff1 * 0.0054931640625 * 90.9091;
+		  //speed0.fl = diff0 * 0.0054931640625 * 90.9091;
+		  //speed1.fl = diff1 * 0.0054931640625 * 90.9091;
 	}
 	else if (htim == &htim3) {
 		// tof

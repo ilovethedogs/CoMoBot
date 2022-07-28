@@ -2938,3 +2938,190 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\GitHub\CoMoBot\Rear
 
 !ENTRY org.eclipse.cdt.core 1 0 2022-07-28 16:15:48.002
 !MESSAGE Indexed 'Rear_1' (28 sources, 126 headers) in 5.88 sec: 13,678 declarations; 80,870 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.16%)
+!SESSION 2022-07-28 19:04:53.621 -----------------------------------------------
+eclipse.buildId=Version 1.10.1
+java.version=11.0.14.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\GitHub\CoMoBot\Rear_1\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\GitHub\CoMoBot\Rear_1\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2022-07-28 19:05:04.143
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-07-28 19:05:04.235
+!MESSAGE Log4j initialized with config file C:\GitHub\CoMoBot\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-07-28 19:05:19.199
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-07-28 19:05:30.239
+!MESSAGE Indexed 'Rear_1' (28 sources, 126 headers) in 10.5 sec: 13,678 declarations; 80,920 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.16%)
+!SESSION 2022-07-28 19:23:02.588 -----------------------------------------------
+eclipse.buildId=Version 1.10.1
+java.version=11.0.14.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\GitHub\CoMoBot\Rear_1\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\GitHub\CoMoBot\Rear_1\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2022-07-28 19:24:50.063
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-07-28 19:24:50.153
+!MESSAGE Log4j initialized with config file C:\GitHub\CoMoBot\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-07-28 19:24:58.677
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-07-28 19:25:04.044
+!MESSAGE Indexed 'Rear_1' (28 sources, 126 headers) in 5.24 sec: 13,701 declarations; 80,972 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.16%)
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2022-07-28 19:26:15.094
+!MESSAGE Using unsafe http transport to retrieve http://vrapper.sourceforge.net/update-site/stable, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2022-07-28 19:26:52.966
+!MESSAGE Using unsafe http transport to retrieve http://vrapper.sourceforge.net/update-site/stable, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2022-07-28 19:26:59.819
+!MESSAGE Using unsafe http transport to retrieve http://vrapper.sourceforge.net/update-site/stable, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:00.834
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.core,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:00.835
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.eclipse.cdt.feature,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:00.835
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.eclipse.cdt,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:00.835
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.eclipse,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:01.368
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:02.743
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.argtextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:02.866
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.argtextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:03.109
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.clangformat,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:03.354
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.clangformat,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:03.892
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.cycle,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:04.348
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.cycle,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:04.898
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.exchange,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:05.357
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.exchange,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:05.882
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.indenttextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:06.356
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.indenttextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:06.880
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.ipmotion,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:07.349
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.ipmotion,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:07.874
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.linetextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:08.350
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.linetextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:08.873
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.methodtextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:09.350
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.methodtextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:09.867
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.sneak,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:10.344
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.sneak,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:10.860
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.splitEditor,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:11.349
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.splitEditor,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:12.346
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.subwordtextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:12.359
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.subwordtextobj,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:13.063
+!MESSAGE No digest algorithm is available to verify download of osgi.bundle,net.sourceforge.vrapper.plugin.surround,0.74.0.
+
+!ENTRY org.eclipse.equinox.p2.artifact.repository 2 0 2022-07-28 19:27:13.343
+!MESSAGE No digest algorithm is available to verify download of org.eclipse.update.feature,net.sourceforge.vrapper.plugin.surround,0.74.0.
+!SESSION 2022-07-28 19:27:30.092 -----------------------------------------------
+eclipse.buildId=Version 1.10.1
+java.version=11.0.14.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\GitHub\CoMoBot\Rear_1\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data file:/C:/GitHub/CoMoBot/ C:\GitHub\CoMoBot\Rear_1\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2022-07-28 19:27:39.132
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-07-28 19:27:39.236
+!MESSAGE Log4j initialized with config file C:\GitHub\CoMoBot\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-07-28 19:27:50.838
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY net.sourceforge.vrapper.eclipse 1 0 2022-07-28 19:27:52.079
+!MESSAGE No .vrapperrc or _vrapperrc found.
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-07-28 19:27:59.703
+!MESSAGE Indexed 'Rear_1' (28 sources, 126 headers) in 8.68 sec: 13,701 declarations; 80,972 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.16%)
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2022-07-28 19:28:22.722
+!MESSAGE Using unsafe http transport to retrieve http://vrapper.sourceforge.net/update-site/stable, see CVE-2021-41033. Consider using https instead.
+!SESSION 2022-07-28 21:27:07.721 -----------------------------------------------
+eclipse.buildId=Version 1.10.1
+java.version=11.0.14.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Framework arguments:  C:\GitHub\CoMoBot\Rear_1\.cproject
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\GitHub\CoMoBot\Rear_1\.cproject
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2022-07-28 21:27:36.872
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2022-07-28 21:27:36.961
+!MESSAGE Log4j initialized with config file C:\GitHub\CoMoBot\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2022-07-28 21:27:48.173
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY net.sourceforge.vrapper.eclipse 1 0 2022-07-28 21:27:50.977
+!MESSAGE No .vrapperrc or _vrapperrc found.
+
+!ENTRY org.eclipse.cdt.core 1 0 2022-07-28 21:27:55.677
+!MESSAGE Indexed 'Rear_1' (28 sources, 126 headers) in 7.15 sec: 13,703 declarations; 80,974 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.16%)
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2022-07-28 21:28:33.669
+!MESSAGE Using unsafe http transport to retrieve http://vrapper.sourceforge.net/update-site/stable, see CVE-2021-41033. Consider using https instead.
+
+!ENTRY net.sourceforge.vrapper.eclipse 1 0 2022-07-28 21:36:55.331
+!MESSAGE No .vrapperrc or _vrapperrc found.

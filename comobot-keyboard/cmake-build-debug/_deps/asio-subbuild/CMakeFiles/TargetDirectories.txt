@@ -1,0 +1,3 @@
+/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/CMakeFiles/asio-populate.dir
+/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/CMakeFiles/edit_cache.dir
+/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/CMakeFiles/rebuild_cache.dir

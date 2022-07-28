@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/CMakeFiles/asio-populate"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/CMakeFiles/asio-populate.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/CMakeFiles/asio-populate-complete.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-build.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-configure.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-download.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-install.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-mkdir.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-patch.rule"
+		},
+		{
+			"file" : "/mnt/c/GitHub/CoMoBot/comobot-keyboard/cmake-build-debug/_deps/asio-subbuild/asio-populate-prefix/src/asio-populate-stamp/asio-populate-test.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"asio-populate"
+		],
+		"name" : "asio-populate"
+	}
+}
